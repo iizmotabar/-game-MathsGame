@@ -20,7 +20,7 @@ class NumberKey extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(3.0),
       child: InkWell(
         onTap: onTap,
         child: Container(

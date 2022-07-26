@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:math_game/constants.dart';
+import 'package:math_game/widgets/alert_dialogue.dart';
 
 import 'widgets/number_key.dart';
 
@@ -58,10 +61,11 @@ class _HomePageState extends State<HomePage> {
   void buttonTapped(String button) {
     //? Checking for equality
     if (button == '=') {
-      //? Check if user is correct or not
-      checkResult();
+      if (userAnswer != '') {
+        //? Check if user is correct or not
+        checkResult();
+      }
     }
-
     //* Clear Button
     if (button == 'C') {
       clearAnswer();
@@ -77,7 +81,7 @@ class _HomePageState extends State<HomePage> {
     //* Pressing the number Keys
     else {
       setState(() {
-        if (userAnswer.length < 3) {
+        if (userAnswer.length < 3 && button != '=') {
           userAnswer += button;
         }
       });
@@ -85,11 +89,29 @@ class _HomePageState extends State<HomePage> {
   }
 
   //!Check for results
-  bool checkResult() {
+  void checkResult() {
     if (numberOne + numberTwo == int.parse(userAnswer)) {
-      return true;
+      showDialog(
+          context: context,
+          builder: (context) {
+            return ShowAlertDialogue(
+                onTap: goToNextAnswer,
+                iconColor: Colors.deepPurple.shade300,
+                headingText: 'Correct!',
+                icon: Icons.arrow_forward);
+          });
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return ShowAlertDialogue(
+              icon: Icons.close,
+              iconColor: Colors.red.shade300,
+              headingText: 'Incorrect, Try Again :D',
+              onTap: goBackToQuestion,
+            );
+          });
     }
-    return false;
   }
 
   //! Delete a buttonTap
@@ -97,6 +119,27 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       userAnswer = '';
     });
+  }
+
+  var randomNumber = Random();
+
+  //! Go to next answer
+  void goToNextAnswer() {
+    //* Dismiss alert dialogue
+    Navigator.pop(context);
+
+    //* Reset Values
+    setState(() {
+      userAnswer = '';
+    });
+    //* Create a new question
+    numberOne = randomNumber.nextInt(10);
+    numberTwo = randomNumber.nextInt(10);
+  }
+
+  void goBackToQuestion() {
+    //* Dismiss alert dialogue
+    Navigator.pop(context);
   }
 
   @override
