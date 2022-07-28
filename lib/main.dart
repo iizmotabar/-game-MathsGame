@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:math_game/constants.dart';
 import 'package:math_game/widgets/alert_dialogue.dart';
+import 'package:math_game/widgets/flat_container.dart';
+import 'package:math_game/widgets/neumorphic_container.dart';
 
 import 'widgets/number_key.dart';
 
@@ -57,6 +59,21 @@ class _HomePageState extends State<HomePage> {
   //! User Answer
   String userAnswer = '';
 
+  //! answerCounter for replacing boxes;
+  int answerCounter = 0;
+
+  //! Level Counter
+  int levelCounter = 0;
+
+  //! List of Boxes
+  final List<Widget> answerBoxesList = [
+    const NeumorphicContainer(),
+    const NeumorphicContainer(),
+    const NeumorphicContainer(),
+    const NeumorphicContainer(),
+    const NeumorphicContainer()
+  ];
+
   //! User Tapped a Button
   void buttonTapped(String button) {
     //? Checking for equality
@@ -90,7 +107,22 @@ class _HomePageState extends State<HomePage> {
 
   //!Check for results
   void checkResult() {
+    for (var element in answerBoxesList) {
+      if (element == const FlatContainer()) {
+        levelCounter += 1;
+        print('Build was called!');
+        build(context);
+      }
+    }
+
     if (numberOne + numberTwo == int.parse(userAnswer)) {
+      if (answerBoxesList[answerCounter] != const NeumorphicContainer()) {
+        setState(() {
+          answerBoxesList.removeAt(answerCounter);
+          answerBoxesList.insert(answerCounter, const FlatContainer());
+          answerCounter++;
+        });
+      }
       showDialog(
           context: context,
           builder: (context) {
@@ -142,6 +174,8 @@ class _HomePageState extends State<HomePage> {
     Navigator.pop(context);
   }
 
+  void keepTrackOfLevel() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,6 +185,11 @@ class _HomePageState extends State<HomePage> {
           Container(
             height: 160,
             color: Colors.deepPurple[500],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: answerBoxesList,
+            ),
           ),
           //! Question
           Expanded(
