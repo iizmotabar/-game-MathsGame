@@ -20,12 +20,12 @@ class NumberKey extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.all(3.0),
+      padding: const EdgeInsets.all(2.0),
       child: InkWell(
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(16),
             color: buttonColor,
           ),
           child: Center(
