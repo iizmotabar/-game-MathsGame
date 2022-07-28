@@ -53,8 +53,8 @@ class _HomePageState extends State<HomePage> {
   ];
 
   //! Random Number assignment
-  int numberOne = 1;
-  int numberTwo = 2;
+  int numberOne = 5;
+  int numberTwo = 7;
 
   //! User Answer
   String userAnswer = '';
@@ -105,33 +105,56 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // for (var element in answerBoxesList) {
+  //           if (element == const FlatContainer()) {
+  //             levelCounter += 1;
+  //             print(levelCounter);
+  //             print('Build was called!');
+  //           }
+  //         }
+
   //!Check for results
   void checkResult() {
-    for (var element in answerBoxesList) {
-      if (element == const FlatContainer()) {
-        levelCounter += 1;
-        print('Build was called!');
-        build(context);
-      }
-    }
-
     if (numberOne + numberTwo == int.parse(userAnswer)) {
       if (answerBoxesList[answerCounter] != const NeumorphicContainer()) {
         setState(() {
           answerBoxesList.removeAt(answerCounter);
           answerBoxesList.insert(answerCounter, const FlatContainer());
           answerCounter++;
+          //* prints the answer counter value
+          print(answerCounter);
         });
       }
-      showDialog(
-          context: context,
-          builder: (context) {
-            return ShowAlertDialogue(
-                onTap: goToNextAnswer,
-                iconColor: Colors.deepPurple.shade300,
-                headingText: 'Correct!',
-                icon: Icons.arrow_forward);
-          });
+      if (answerCounter == 5) {
+        levelCounter++;
+        answerCounter = 0;
+        print('Level setter was called!');
+        showDialog(
+            context: context,
+            builder: (context) {
+              return ShowAlertDialogue(
+                  onTap: goToNextAnswer,
+                  iconColor: Colors.deepPurple.shade300,
+                  headingText: 'LEVEL UP! Level $levelCounter now!',
+                  icon: Icons.arrow_forward);
+            });
+        setState(() {
+          answerBoxesList.clear();
+          for (int i = 0; i <= 4; i++) {
+            answerBoxesList.add(const NeumorphicContainer());
+          }
+        });
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return ShowAlertDialogue(
+                  onTap: goToNextAnswer,
+                  iconColor: Colors.deepPurple.shade300,
+                  headingText: 'Correct!',
+                  icon: Icons.arrow_forward);
+            });
+      }
     } else {
       showDialog(
           context: context,
@@ -173,8 +196,6 @@ class _HomePageState extends State<HomePage> {
     //* Dismiss alert dialogue
     Navigator.pop(context);
   }
-
-  void keepTrackOfLevel() {}
 
   @override
   Widget build(BuildContext context) {
