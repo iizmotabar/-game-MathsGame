@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
   int answerCounter = 0;
 
   //! Level Counter
-  int levelCounter = 4;
+  int levelCounter = 5;
 
   //! List of Boxes
   final List<Widget> answerBoxesList = [
@@ -67,11 +67,6 @@ class _HomePageState extends State<HomePage> {
         checkResult();
       }
     }
-
-    // //* Minus Button
-    // if (button == '-') {
-    //   userAnswer
-    // }
 
     //* Clear Button
     if (button == 'C') {
@@ -104,21 +99,24 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future showLevelUpDialogBox(int levelNumber) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return ShowAlertDialogue(
+              onTap: goToNextAnswer,
+              iconColor: Colors.deepPurple.shade300,
+              headingText: 'LEVEL UP! Level $levelNumber now!',
+              icon: Icons.arrow_forward);
+        });
+  }
+
+  
+
+  
+
   //!Check for results
   void checkResult() {
-    if (levelCounter > 5) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return ShowAlertDialogue(
-                onTap: goToNextAnswer,
-                iconColor: Colors.deepPurple.shade300,
-                headingText: 'You\'ve completed all levels! Congratulations!',
-                icon: Icons.arrow_forward);
-          });
-      levelCounter = 0;
-      resetProgress();
-    }
     if (levelCounter < 2) {
       //* Catering for addition problems
       if (numberOne + numberTwo == int.parse(userAnswer)) {
@@ -128,22 +126,12 @@ class _HomePageState extends State<HomePage> {
             answerBoxesList.insert(answerCounter, const FlatContainer());
             answerCounter++;
             //* prints the answer counter value
-            print(answerCounter);
           });
         }
         if (answerCounter == 5) {
           levelCounter++;
           answerCounter = 0;
-          print('Level setter was called!');
-          showDialog(
-              context: context,
-              builder: (context) {
-                return ShowAlertDialogue(
-                    onTap: goToNextAnswer,
-                    iconColor: Colors.deepPurple.shade300,
-                    headingText: 'LEVEL UP! Level $levelCounter now!',
-                    icon: Icons.arrow_forward);
-              });
+          showLevelUpDialogBox(levelCounter);
           setState(() {
             resetProgress();
           });
@@ -177,23 +165,12 @@ class _HomePageState extends State<HomePage> {
             answerBoxesList.removeAt(answerCounter);
             answerBoxesList.insert(answerCounter, const FlatContainer());
             answerCounter++;
-            //* prints the answer counter value
-            print(answerCounter);
           });
         }
         if (answerCounter == 5) {
           levelCounter++;
           answerCounter = 0;
-          print('Level setter was called!');
-          showDialog(
-              context: context,
-              builder: (context) {
-                return ShowAlertDialogue(
-                    onTap: goToNextAnswer,
-                    iconColor: Colors.deepPurple.shade300,
-                    headingText: 'LEVEL UP! Level $levelCounter now!',
-                    icon: Icons.arrow_forward);
-              });
+          showLevelUpDialogBox(levelCounter);
           setState(() {
             answerBoxesList.clear();
             for (int i = 0; i <= 4; i++) {
@@ -230,23 +207,12 @@ class _HomePageState extends State<HomePage> {
             answerBoxesList.removeAt(answerCounter);
             answerBoxesList.insert(answerCounter, const FlatContainer());
             answerCounter++;
-            //* prints the answer counter value
-            print(answerCounter);
           });
         }
         if (answerCounter == 5) {
           levelCounter++;
           answerCounter = 0;
-          print('Level setter was called!');
-          showDialog(
-              context: context,
-              builder: (context) {
-                return ShowAlertDialogue(
-                    onTap: goToNextAnswer,
-                    iconColor: Colors.deepPurple.shade300,
-                    headingText: 'LEVEL UP! Level $levelCounter now!',
-                    icon: Icons.arrow_forward);
-              });
+          showLevelUpDialogBox(levelCounter);
           setState(() {
             answerBoxesList.clear();
             for (int i = 0; i <= 4; i++) {
@@ -276,6 +242,19 @@ class _HomePageState extends State<HomePage> {
               );
             });
       }
+    }
+    if (levelCounter > 5) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return ShowAlertDialogue(
+                onTap: goToNextAnswer,
+                iconColor: Colors.deepPurple.shade300,
+                headingText: 'You\'ve completed all levels! Congratulations!',
+                icon: Icons.arrow_forward);
+          });
+      levelCounter = 0;
+      resetProgress();
     }
   }
 
